@@ -38,6 +38,7 @@ function main(a1) {
   document.getElementById("result1").style.backgroundColor="green";
   timeout=setTimeout("resultreset()",1000)
   document.getElementById("result2").textContent = wincount+"번 정답입니다.";
+  start();
   } else{
   losecount=losecount+1;
   document.getElementById("result1").textContent = "틀렸습니다.";
@@ -46,11 +47,8 @@ function main(a1) {
   document.getElementById("result3").textContent = losecount+"번 틀렸습니다.";
   }
 
-  start();
-
   var input = document.getElementById("txt");
   input.value = null;
-
   }
 
  onload = () => {
