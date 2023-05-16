@@ -4,10 +4,15 @@ let losecount=0;
 var timeout;
 
 function start() {
-  x1=Math.floor( ( Math.random() * 19 - 9 ) );
-  x2=Math.floor( ( Math.random() * 19 - 9 ) );
+  x1=Math.floor( ( Math.random() * 18 - 8 ) );
+  x2=Math.floor( ( Math.random() * 18 - 8 ) );
   x3=Math.floor( ( Math.random() * 2) );
-  
+
+  // 0 제거
+  if(x1<1) x1-=1
+  if(x2<1) x2-=1
+
+  // 정답 확인
   if(x3==0) 
   r1=x1+x2 
   else
