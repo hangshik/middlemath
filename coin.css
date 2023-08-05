@@ -1,0 +1,35 @@
+body{
+    text-size-adjust: 50px;
+}
+
+div {
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    margin: auto;
+}
+
+#myImage {
+    display: flex;
+    flex-wrap: wrap; /* 이미지가 가로로 나열되다가, 화면 크기에 따라 줄바꿈 */
+    gap: 10px; /* 이미지 사이의 간격 설정 (선택 사항) */
+}
+
+.container{
+    display: grid;
+    gap:10px;
+}
+
+.row{
+    float: left;
+}
+
+.column{
+    width: 60px;
+    height: 60px;
+    background-color: #DDDDDD;
+    margin: -3px 2px -3px 2px;
+    float: left;
+    border-radius: 5px;
+    padding: 5px;
+}

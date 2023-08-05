@@ -1,0 +1,47 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="./coin.css">
+        <script src="./coin1.js"></script>
+        <title>동전이 의미하는 수를 찾아라!!</title>
+    </head>
+    <body>
+        <center>
+        <font size=6px>아래 그림과 같이 동전이 주어졌다면 얼마를 의미하는가?</font><br><br>
+
+        <!-- <div id="problem" style="font-size:30px">문제</div><br/> -->
+        <div id="myImage">이미지 공간</div>
+        <br>
+        <font size=5px><input type="number" id="txt" value="" style="font-size:20px;width:80px;height:40px;text-align:center">
+        <button id="myBtn" onclick="main(txt.value)" style="font-size:20px"> 정답 확인 </button>
+        </font>
+        </center>
+        <hr/>
+        <div id="result1" style="font-size:30px">정답여부</div>
+        <div id="result2" style="font-size:30px">0번 정답입니다.</div>
+        <div id="result3" style="font-size:30px">0번 틀렸습니다.</div>
+        <br><center><font size="5px"><b>[정답을 입력하세요]</b></font>
+
+        <br><br><br><center><font size="5px" color="blue"><b>참고: 동전 순서</b></font>
+        <br>
+        <img src="img1.png">
+        <img src="img2.png">
+        <img src="img3.png">
+        <img src="img4.png">
+        <img src="img5.png">
+        </center>
+
+        <!-- 엔터로 입력 -->
+        <script>
+            var input = document.getElementById("txt");
+            input.addEventListener("keyup", function (event) {
+              if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById("myBtn").click();
+              }
+            });
+          </script>
+    </body>
+</html>
