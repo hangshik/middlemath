@@ -12,8 +12,8 @@
         <font size=6px>정수의 덧셈과 뺄셈</font><br><br>
         <div id="problem" style="font-size:30px">문제</div><br>
         <font size=5px><input type="number" id="txt" value="" style="font-size:20px;width:80px;height:40px;text-align:center">
-        <button id="myBtn" onclick="main2(txt.value)" style="font-size:20px"> (-)정답 </button>
-        <button id="myBtn" onclick="main1(txt.value)" style="font-size:20px"> (+)정답 </button>
+        <button id="myBtn2" onclick="main2(txt.value)" style="font-size:20px"> (-)정답 </button>
+        <button id="myBtn1" onclick="main1(txt.value)" style="font-size:20px"> (+)정답 </button>
         </font>
         </center>
         <hr/>
@@ -28,7 +28,7 @@
             input.addEventListener("keyup", function (event) {
               if (event.keyCode === 13) {
                 event.preventDefault();
-                document.getElementById("myBtn").click();
+                document.getElementById("myBtn1").click();
               }
             });
           </script>
