@@ -1,0 +1,36 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="./pi.css">
+        <script src="./pi.js"></script>
+        <title>파이게임</title>
+    </head>
+    <body>
+        <center>
+        <font size=6px>파이게임
+            <br><br>
+            <div id="result1" style="font-size:30px">파이게임을 시작합니다.</div>
+            </font>            
+        
+        </font>
+        </center>
+        <hr/>
+        <div id="area" style="font-size:30px"></div><br>
+        
+        
+        <br><center>
+        <button id="reloadButton" style="font-size:20px"> 다시 시작 </button><br><br>
+        <script>
+            // JavaScript 코드를 HTML 파일 내부에 작성
+            document.getElementById('reloadButton').addEventListener('click', function() {
+                window.location.reload(); // 페이지를 다시 불러오는 명령어
+            });
+        </script>
+
+        <font size="5px"><b>[파이게임 방법]</b><br>
+        - 3을 입력하면 시작됩니다.<br>
+        - 숫자를 클릭해도 되고, 키보드로 입력해도 됩니다.</font></center>
+    </body>
+</html>
