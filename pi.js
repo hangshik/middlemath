@@ -52,7 +52,7 @@ function clickbt(nn) {
   } else if (!stop)  {}
   else {
     // result1.textContent ="파이게임을 시작합니다."
-    result1.textContent ="결과: "+count+"번째까지 성공하셨습니다."
+    result1.textContent ="["+count+"번째까지 성공하셨습니다.]"
     // result2.textContent ="이전결과: "+count+"번째까지 성공하셨습니다."
     document.getElementById(nn).style.backgroundColor="red";
     timeout=setTimeout("resultreset()",500)
