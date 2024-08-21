@@ -40,20 +40,21 @@ function resultreset(){
   document.getElementById(9).style.backgroundColor="#dddddd";
 }
 
-
 let stop = true;
 
 function clickbt(nn) {
   if(nn==pi[count] && stop){
     count=count+1
-    result1.textContent =count+"번째 성공하셨습니다."
+    result1.textContent ="게임 진행중\n"+count+"번째 성공하셨습니다."
+    result1.style.color="blue"
     document.getElementById(nn).style.backgroundColor="green";
     timeout=setTimeout("resultreset()",200)
   } else if (!stop)  {}
   else {
     // result1.textContent ="파이게임을 시작합니다."
-    result1.textContent ="["+count+"번째까지 성공하셨습니다.]"
+    result1.textContent ="게임 끝\n["+count+"번째까지 성공하셨습니다.]"
     // result2.textContent ="이전결과: "+count+"번째까지 성공하셨습니다."
+    result1.style.color="red"
     document.getElementById(nn).style.backgroundColor="red";
     timeout=setTimeout("resultreset()",500)
     stop = false;
