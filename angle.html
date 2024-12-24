@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>드래그 가능한 선</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+            display: block;
+            margin: 20px auto;
+        }
+        .target {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .result {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="target" id="targetAngleDisplay"></div>
+    <br><center>
+    <button id="reloadButton" style="font-size:20px"> 다시 시작 </button><br><br>
+        <script>
+            // JavaScript 코드를 HTML 파일 내부에 작성
+            document.getElementById('reloadButton').addEventListener('click', function() {
+                window.location.reload(); // 페이지를 다시 불러오는 명령어
+            });
+        </script>
+    </center>
+    <canvas id="circleCanvas" width="400" height="400"></canvas>
+    <div class="result" id="resultMessage"></div>
+    <script>
+        const canvas = document.getElementById('circleCanvas');
+        const ctx = canvas.getContext('2d');
+        const targetAngleDisplay = document.getElementById('targetAngleDisplay');
+        const resultMessage = document.getElementById('resultMessage');
+
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const radius = 150;
+
+        let originalAngle = Math.round(Math.random() * 360); // 1도 단위 랜덤 각도
+        let currentAngle = originalAngle;
+        const targetAngle = 30 + Math.random() * 120; // 30도 ~ 90도 랜덤 값
+
+        // 목표 각도 표시
+        targetAngleDisplay.textContent = `목표 각도: ${targetAngle.toFixed(0)}도`;
+
+        // 원 그리기 함수
+        function drawCircle() {
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+
+        // 선 그리기 함수
+        function drawLine(angle, color = 'black') {
+            const radian = (angle * Math.PI) / 180;
+            const x = centerX + radius * Math.cos(radian);
+            const y = centerY + radius * Math.sin(radian);
+            
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(x, y);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        // 캔버스 초기화
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // 화면 초기화 및 기본 선 그리기
+        function draw() {
+            clearCanvas();
+            drawCircle();
+            drawLine(originalAngle, 'blue'); // 원래 선은 파란색
+            drawLine(currentAngle, 'red');  // 움직이는 선은 빨간색
+        }
+
+        // 드래그 관련 변수
+        let isDragging = false;
+
+        // 드래그 시작
+        canvas.addEventListener('mousedown', (event) => {
+            isDragging = true;
+        });
+
+        // 드래그 진행
+        canvas.addEventListener('mousemove', (event) => {
+            if (!isDragging) return;
+
+            // 마우스 위치를 기준으로 각도 계산
+            const dx = event.offsetX - centerX;
+            const dy = event.offsetY - centerY;
+            let angle = Math.atan2(dy, dx) * (180 / Math.PI); // 라디안 -> 각도
+            angle = Math.round((angle + 360) % 360); // 각도 정규화 및 1도 단위로 반올림
+            currentAngle = angle;
+            draw();
+        });
+
+        // 드래그 종료
+        canvas.addEventListener('mouseup', () => {
+            isDragging = false;
+
+            // 현재 각도와 처음 선(파란색 선)과의 차이 계산
+            const angleDifference = Math.abs(currentAngle - originalAngle);
+            const normalizedDifference = Math.min(angleDifference, 360 - angleDifference); // 0~180도 차이
+
+            // 목표 각도와 비교
+            const targetDifference = Math.abs(normalizedDifference - targetAngle);
+
+            // 결과 출력
+            if (targetDifference <= 1) { // 목표 각도 ±1도 허용
+                resultMessage.textContent = '맞습니다!';
+                resultMessage.style.color = 'green';
+            } else {
+                resultMessage.textContent = `틀렸습니다. 현재 각도: ${normalizedDifference.toFixed(0)}도, 목표 각도(${targetAngle.toFixed(0)}도)와의 차이: ${targetDifference.toFixed(0)}도.`;
+                resultMessage.style.color = 'red';
+            }
+        });
+
+        // 초기 그리기
+        draw();
+    </script>
+</body>
+</html>
