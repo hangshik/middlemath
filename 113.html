@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>유리수의 덧셈과 뺄셈</title>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+        });
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            font-size: 30px;
+            margin: 10px 0;
+        }
+        .problem {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .operator {
+            font-size: 40px; /* 연산 기호 크기 키우기 */
+        }
+        #result {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        #correct, #wrong {
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>유리수의 덧셈과 뺄셈</h1>
+    <ul id="problem-list"></ul>
+
+    <script>
+        let currentProblem;
+        let correctCount = 0;
+        let wrongCount = 0;
+        let keepProblem = false;
+
+        // 최대공약수(GCD) 계산
+        const gcd = (a, b) => (b === 0 ? a : gcd(b, a % b));
+
+        // 최소공배수(LCM) 계산
+        const lcm = (a, b) => (a * b) / gcd(a, b);
+
+        // 기약분수 생성
+        const generateReducedFraction = () => {
+            const numerators = [-9, -8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+            const denominators = [2, 3, 4, 5, 6, 7, 8, 9];
+
+            let num, den;
+            do {
+                num = numerators[Math.floor(Math.random() * numerators.length)];
+                den = denominators[Math.floor(Math.random() * denominators.length)];
+            } while (gcd(Math.abs(num), den) !== 1); // 기약분수만 생성
+
+            return [num, den];
+        };
+
+        // 문제 생성
+        const generateRandomProblem = () => {
+            const op = Math.random() < 0.5 ? "+" : "-";
+            return [generateReducedFraction(), op, generateReducedFraction()];
+        };
+
+        // 분수를 LaTeX 형식으로 변환
+        const formatFraction = ([numerator, denominator]) => {
+            return (numerator < 0) 
+                ? `$\\left(-\\frac{${Math.abs(numerator)}}{${denominator}}\\right)$`
+                : `$\\frac{${numerator}}{${denominator}}$`;
+        };
+
+        // 두 분수의 덧셈 또는 뺄셈 계산
+        const calculateAnswer = ([a, op, b]) => {
+            const [n1, d1] = a;
+            const [n2, d2] = b;
+            const commonDenominator = lcm(d1, d2);
+            const num1 = n1 * (commonDenominator / d1);
+            const num2 = n2 * (commonDenominator / d2);
+            const numerator = (op === "+") ? num1 + num2 : num1 - num2;
+            return simplifyFraction([numerator, commonDenominator]);
+        };
+
+        // 기약분수로 변환
+        const simplifyFraction = ([num, den]) => {
+            const divisor = gcd(Math.abs(num), Math.abs(den));
+            return [num / divisor, den / divisor];
+        };
+
+        // 문제 표시
+        const problemList = document.getElementById("problem-list");
+
+        function displayRandomProblem() {
+            problemList.innerHTML = ''; // 문제 초기화
+
+            if (!keepProblem) {
+                currentProblem = generateRandomProblem(); // 랜덤 문제 생성
+            }
+
+            const li = document.createElement("li");
+            li.innerHTML = `
+                <div class='problem'>
+                    ${formatFraction(currentProblem[0])} 
+                    <span class="operator">${currentProblem[1]}</span>
+                    ${formatFraction(currentProblem[2])} = 
+                    <input type="text" id="answer" placeholder="분자/분모 또는 정수" style="width:100px;font-size:20px">
+                    <button onclick="checkAnswer()" style="font-size:20px">확인</button>
+                </div>
+                <div id="result">정답여부</div>
+                <div>
+                    <span id="correct" style="color:green">${correctCount}번 정답</span> | 
+                    <span id="wrong" style="color:red">${wrongCount}번 오답</span>
+                </div>
+            `;
+            problemList.appendChild(li);
+
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            document.getElementById("answer").focus(); // 입력 필드에 포커스
+
+            // 엔터로 정답 확인
+            document.getElementById("answer").addEventListener("keyup", (event) => {
+                if (event.key === "Enter") {
+                    checkAnswer();
+                }
+            });
+        }
+
+        // 정답 확인
+        function checkAnswer() {
+            const answerInput = document.getElementById("answer").value;
+            const resultDiv = document.getElementById("result");
+
+            if (!answerInput.includes('/') && isNaN(Number(answerInput))) {
+                resultDiv.innerHTML = "입력 형식이 잘못되었습니다!";
+                resultDiv.style.color = "red";
+                return;
+            }
+
+            let inputNum, inputDen;
+
+            if (answerInput.includes('/')) {
+                [inputNum, inputDen] = answerInput.split("/").map(Number);
+                if (isNaN(inputNum) || isNaN(inputDen) || inputDen === 0) {
+                    resultDiv.innerHTML = "올바른 분수를 입력하세요!";
+                    resultDiv.style.color = "red";
+                    return;
+                }
+            } else {
+                inputNum = Number(answerInput);
+                inputDen = 1;  // 정수인 경우 분모는 1로 처리
+            }
+
+            const correctAnswer = calculateAnswer(currentProblem);
+            const simplifiedInput = simplifyFraction([inputNum, inputDen]);
+
+            if (simplifiedInput[0] === correctAnswer[0] && simplifiedInput[1] === correctAnswer[1]) {
+                correctCount++;
+                resultDiv.innerHTML = "정답입니다!";
+                resultDiv.style.color = "green";
+                document.getElementById("correct").textContent = `${correctCount}번 정답`;
+                keepProblem = false;
+                setTimeout(displayRandomProblem, 1000);
+            } else {
+                wrongCount++;
+                resultDiv.innerHTML = "틀렸습니다! 다시 도전하세요.";
+                resultDiv.style.color = "red";
+                document.getElementById("wrong").textContent = `${wrongCount}번 오답`;
+                keepProblem = true; // 틀린 문제 유지
+                setTimeout(displayRandomProblem, 500);
+            }
+
+            // 기약분수가 아닐 경우 메시지 표시
+            if (simplifiedInput[0] !== inputNum || simplifiedInput[1] !== inputDen) {
+                resultDiv.innerHTML = "기약분수로 입력하세요.";
+                resultDiv.style.color = "orange";
+            }
+        }
+
+        // 첫 문제 표시
+        displayRandomProblem();
+    </script>
+</body>
+</html>
