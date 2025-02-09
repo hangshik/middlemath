@@ -1,35 +1,188 @@
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="./112.js"></script>
-        <title>정수의 덧셈과 뺄셈</title>
-    </head>
-    <body>
-        <center>
-        <font size=6px>정수의 덧셈과 뺄셈</font><br><br>
-        <div id="problem" style="font-size:30px">문제</div><br>
-        <font size=5px><input type="number" id="txt" value="" style="font-size:20px;width:80px;height:40px;text-align:center">
-        <button id="myBtn" onclick="main(txt.value)" style="font-size:20px"> 정답 확인 </button>
-        </font>
-        
-        <hr/>
-        <div id="result1" style="font-size:30px">정답여부</div>
-        <div id="result2" style="font-size:30px">0번 정답입니다.</div>
-        <div id="result3" style="font-size:30px">0번 틀렸습니다.</div>
-        <br><font size="5px"><b>[정답을 입력하고 엔터를 누르세요.]</b></font>
-        </center>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정수의 덧셈과 뺄셈</title>
+    <style>
+      body {
+          text-size-adjust: 50px;
+      }
 
-        <!-- 엔터로 입력 -->
-        <script>
-            var input = document.getElementById("txt");
-            input.addEventListener("keyup", function (event) {
-              if (event.keyCode === 13) {
-                event.preventDefault();
-                document.getElementById("myBtn").click();
-              }
-            });
-          </script>
-    </body>
+      div {
+          display: flex;
+          justify-content: center;
+          align-items: center;    
+      }
+
+      .container {
+          display: grid;
+          gap: 10px;
+      }
+
+      .row {
+          float: left;
+      }
+
+      .column {
+          width: 60px;
+          height: 60px;
+          background-color: #DDDDDD;
+          border-radius: 5px;
+      }
+
+      .button {
+          width: 60px;
+          height: 60px;
+          font-size: 25px;
+          margin: 2px 0px;
+          border-radius: 5px;
+          border: none;
+          background-color: #DDDDDD;
+          cursor: pointer;
+      }
+
+      .button:hover {
+          background-color: #CCCCCC;
+      }
+
+      #txt {
+          font-size: 30px;
+          width: 80px;
+          height: 40px;
+          text-align: center;
+          margin-left: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <center>
+      <font size=6px>정수의 덧셈과 뺄셈</font><br><br>
+
+      <div style="display: flex; align-items: center; justify-content: center; text-align: center;">
+        <div id="problem" style="font-size: 30px; margin-right: 10px;">문제</div>
+        <font size="6">=</font>
+        <input type="text" id="txt" value="" readonly>
+      </div>
+      
+      <br>
+      <button class="button" onclick="appendNumber(1)">1</button>
+      <button class="button" onclick="appendNumber(2)">2</button>
+      <button class="button" onclick="appendNumber(3)">3</button>
+      <button class="button" onclick="appendNumber(4)">4</button>
+      <button class="button" onclick="appendNumber(5)">5</button><br>
+      <button class="button" onclick="appendNumber(6)">6</button>
+      <button class="button" onclick="appendNumber(7)">7</button>
+      <button class="button" onclick="appendNumber(8)">8</button>
+      <button class="button" onclick="appendNumber(9)">9</button>
+      <button class="button" onclick="appendNumber(0)">0</button><br>
+      <button class="button" onclick="appendNumber('-')">-</button>
+      <button class="button" onclick="clearInput()">C</button>
+      <button class="button" onclick="backspace()">←</button>
+      <button class="button" onclick="main()" style="width: 125px;">정답 확인</button>
+    
+    <hr/>
+    <div id="result1" style="font-size:30px">정답여부</div>
+    <div id="result2" style="font-size:30px">0번 정답입니다.</div>
+    <div id="result3" style="font-size:30px">0번 틀렸습니다.</div>
+    <br><font size="5px"><b>[정답을 입력하세요]</b></font></center>
+
+    <script>
+      let wincount = 0;
+      let losecount = 0;
+      var timeout;
+
+      function start() {
+          x1 = Math.floor((Math.random() * 18 - 8));
+          x2 = Math.floor((Math.random() * 18 - 8));
+          x3 = Math.floor((Math.random() * 2));
+
+          // 0 제거
+          if(x1 < 1) x1 -= 1;
+          if(x2 < 1) x2 -= 1;
+
+          // 정답 확인
+          if(x3 == 0) {
+              r1 = x1 + x2;
+          } else {
+              r1 = x1 - x2;
+          }
+
+          // 문제 표현
+          if(x1 < 0) x1 = "(" + x1 + ")";
+          if(x2 < 0) x2 = "(" + x2 + ")";
+          if(x3 == 0) {
+              x3 = "+";
+          } else {
+              x3 = "-";
+          }
+
+          document.getElementById("problem").textContent = x1 + " " + x3 + " " + x2;
+      }
+
+      function resultreset() {
+          document.getElementById("result1").textContent = "정답여부";
+          document.getElementById("result1").style.backgroundColor = "white";
+      }
+
+      function appendNumber(num) {
+          const input = document.getElementById("txt");
+          input.value += num;
+      }
+
+      function backspace() {
+          const input = document.getElementById("txt");
+          input.value = input.value.slice(0, -1); // 마지막 문자 삭제
+      }
+
+      function clearInput() {
+          const input = document.getElementById("txt");
+          input.value = ""; // 입력값 전체 삭제
+      }
+
+      function main() {
+          const input = document.getElementById("txt");
+          const a1 = input.value;
+
+          if(r1 == a1) {
+              wincount = wincount + 1;
+              document.getElementById("result1").textContent = "정답입니다.";
+              document.getElementById("result1").style.backgroundColor = "green";
+              timeout = setTimeout("resultreset()", 1000);
+              document.getElementById("result2").textContent = wincount + "번 정답입니다.";
+              start();
+          } else {
+              losecount = losecount + 1;
+              document.getElementById("result1").textContent = "틀렸습니다.";
+              document.getElementById("result1").style.backgroundColor = "red";
+              timeout = setTimeout("resultreset()", 1000);
+              document.getElementById("result3").textContent = losecount + "번 틀렸습니다.";
+          }
+
+          input.value = "";
+      }
+
+      onload = () => {
+          start();
+      }
+
+      
+
+      // 키보드 입력 처리
+      document.addEventListener('keydown', function(event) {
+          const key = event.key;
+          if (key >= '0' && key <= '9') {
+              appendNumber(key);
+          } else if (key === '-') {
+              appendNumber('-');
+          } else if (key === 'Backspace') {
+              backspace(); // Backspace 키로 마지막 문자 삭제
+          } else if (key === 'Esc') {
+              clearInput(); // Esc 키로 전체 삭제
+          } else if (key === 'Enter') {
+              main(); // Enter 키로 정답 확인
+          }
+      });
+    </script>
+  </body>
 </html>
